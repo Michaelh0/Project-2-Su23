@@ -74,7 +74,17 @@ class ReflexAgent(Agent):
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
-        "*** YOUR CODE HERE ***"
+        manhattanDistance from pacman and ghosts 
+
+        if new Ghost state is scared:
+            check if distance is 1/2 to get to ghost
+            if so add 500 to score
+        
+        check distances from foods 
+            manhattanDistance from pacman and food
+            choose the minimum of the bunch . also thinking of average 
+        
+        return sum of manhattanDistance1 + extra + manhattanDistance2
         return successorGameState.getScore()
 
 def scoreEvaluationFunction(currentGameState: GameState):
@@ -135,8 +145,14 @@ class MinimaxAgent(MultiAgentSearchAgent):
         gameState.isLose():
         Returns whether or not the game state is a losing state
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        helper function (pacman)
+            keeps track of which agents is time to moves
+            returns max of two other functions - two different paths they can take
+
+        helper function (ghost)
+            keeps track of which agents is time to moves
+            returns min of two other functions - two different paths they can take
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
