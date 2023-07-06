@@ -415,10 +415,56 @@ def betterEvaluationFunction(currentGameState: GameState):
     Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
     evaluation function (question 5).
 
-    DESCRIPTION: <write something here so we know what you did>
+    DESCRIPTION: just copied the reflexive agent and took the average of the possible actions to score the position
+                if the possible actions were none, i took the current state's score
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    possibleActions = currentGameState.getLegalActions(0)
+    averagez = 0
+    for action in possibleActions:
+        successorGameState = currentGameState.generatePacmanSuccessor(action)
+        newPos = successorGameState.getPacmanPosition()
+        newFood = successorGameState.getFood()
+        newGhostStates = successorGameState.getGhostStates()
+        newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+
+        #print(successorGameState)
+        #print(newFood.asList())
+        #print(newGhostStates)
+        sum = []
+        adding = 0
+        for i in newFood.asList():
+            xy1 = i
+            xy2 = newPos
+            total = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+            if total < 4:
+                adding += 1
+            elif total < 10:
+                adding += 0.5
+        #power pellets are o's on the grid
+        ghost = 0
+        ghost_counter = 0
+        for i in newGhostStates:
+            xy1 = i.getPosition()
+            xy2 = newPos
+            total = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+            if total < 4:
+                ghost -= 50
+            if newScaredTimes[ghost_counter] > total:
+                ghost += 200
+            ghost_counter += 1
+
+        averagez += adding + successorGameState.getScore() + ghost   
+
+    # for i in newGhostStates:
+    #     xy1 = i.getPosition()
+    #     xy2 = newPos
+    #     total = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+    #     if total - newScaredTimes:
+    #         ghost -= 100
+    if not possibleActions:
+        return currentGameState.getScore()
+    return averagez / (len(possibleActions))
 
 # Abbreviation
 better = betterEvaluationFunction
